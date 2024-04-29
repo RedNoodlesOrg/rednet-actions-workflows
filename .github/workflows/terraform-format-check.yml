@@ -1,7 +1,10 @@
 name: Terraform Format Check
 
 on:
-  workflow_call:
+  pull_request:
+    branches: [main]
+    paths:
+      - '**/*.tf'
 
 jobs:
   check-format:
