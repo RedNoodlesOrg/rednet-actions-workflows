@@ -1,17 +1,11 @@
 name: Deploy with Terraform
+
 on:
-  workflow_call:
-    inputs:
-      apply_changes:
-        description: 'Apply Terraform changes'
-        required: false
-        default: false
-        type: boolean
-    secrets:
-      TF_API_TOKEN:
-        required: true
-      SSH_PRIVATE_KEY:
-        required: true
+  pull_request:
+    branches: [main]
+    paths:
+      - '**/*.tf'
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
