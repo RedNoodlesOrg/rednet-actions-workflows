@@ -55,13 +55,4 @@ jobs:
       # Checks that all Terraform configuration files adhere to a canonical format
       - name: Terraform Format
         run: terraform fmt -check
-
-      # Generates an execution plan for Terraform
-      - name: Terraform Plan
-        run: terraform plan -input=false
-
-      # On push to "main", build or change infrastructure according to Terraform configuration files
-      - name: Terraform Apply
-        if: ${{ inputs.apply_changes }}
-        run: terraform apply -auto-approve -input=false
           
