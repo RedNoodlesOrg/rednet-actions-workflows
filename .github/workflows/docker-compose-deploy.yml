@@ -18,7 +18,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Action
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: SSH Setup Action
         uses: RedNoodlesOrg/rednet-actions-cloudflared-ssh@main
       - name: Expose github environment as shell variables
         env:
