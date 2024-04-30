@@ -1,0 +1,39 @@
+name: Deploy docker compose
+
+on:
+  workflow_call:
+    inputs:
+      SSH_REMOTE_USER:
+        type: string
+        required: true
+      SSH_REMOTE_HOST:
+        type: string
+        required: true
+    secrets:
+      SSH_PRIVATE_KEY:
+        required: true
+      CLOUDFLARED_ID:
+        required: true
+      CLOUDFLARED_SECRET:
+        required: true
+
+env:
+  DOCKER_HOST: "ssh://${{ vars.SSH_REMOTE_USER }}@${{ vars.SSH_REMOTE_HOST }}"
+  SSH_REMOTE_HOST: ${{ vars.SSH_REMOTE_HOST }}
+  SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+  CLOUDFLARED_ID: ${{ secrets.CLOUDFLARED_ID }}
+  CLOUDFLARED_SECRET: ${{ secrets.CLOUDFLARED_SECRET }}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Action
+        uses: RedNoodlesOrg/rednet-actions-cloudflared-ssh@main
+      - name: Docker
+        id: docker
+        run: docker compose up -d
