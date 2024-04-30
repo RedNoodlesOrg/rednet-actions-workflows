@@ -35,5 +35,4 @@ jobs:
       - name: Action
         uses: RedNoodlesOrg/rednet-actions-cloudflared-ssh@main
       - name: Docker
-        id: docker
         run: docker compose up -d

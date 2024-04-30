@@ -4,7 +4,7 @@ on:
     workflow_dispatch: 
 jobs:
     test:
-        uses: RedNoodlesOrg/rednet-actions-workflows/docker-compose-deploy.yml@main
+        uses: RedNoodlesOrg/rednet-actions-workflows/.github/workflows/docker-compose-deploy.yml@main
         with:
             SSH_REMOTE_HOST: ${{ vars.SSH_REMOTE_HOST }}
             SSH_REMOTE_USER: ${{ vars.SSH_REMOTE_USER }}
