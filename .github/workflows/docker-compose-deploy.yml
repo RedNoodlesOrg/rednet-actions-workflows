@@ -2,13 +2,12 @@ name: Deploy docker compose
 
 on:
   workflow_call:
+    secrets:
+      SECRETS:
+        required: true
 
 env:
   DOCKER_HOST: "ssh://${{ vars.SSH_REMOTE_USER }}@${{ vars.SSH_REMOTE_HOST }}"
-  SSH_REMOTE_HOST: ${{ vars.SSH_REMOTE_HOST }}
-  SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-  CLOUDFLARED_ID: ${{ secrets.CLOUDFLARED_ID }}
-  CLOUDFLARED_SECRET: ${{ secrets.CLOUDFLARED_SECRET }}
 
 defaults:
   run:
@@ -24,7 +23,7 @@ jobs:
         uses: RedNoodlesOrg/rednet-actions-cloudflared-ssh@main
       - name: Expose github environment as shell variables
         env:
-          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+          SECRETS_CONTEXT: ${{ toJson(secrets.SECRETS) }}
           VARS_CONTEXT: ${{ toJson(vars) }}
         run: |
           EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
