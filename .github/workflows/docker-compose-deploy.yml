@@ -2,9 +2,6 @@ name: Deploy docker compose
 
 on:
   workflow_call:
-    secrets:
-      SECRETS_JSON:
-        required: true
 
 env:
   DOCKER_HOST: "ssh://${{ vars.SSH_REMOTE_USER }}@${{ vars.SSH_REMOTE_HOST }}"
@@ -19,10 +16,12 @@ jobs:
     steps:
       - name: Expose github environment as shell variables
         env:
-          SECRETS_CONTEXT: ${{ secrets.SECRETS_JSON }}
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+          VARS_CONTEXT: ${{ toJson(vars) }}
         run: |
           EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
           to_envs() { jq -r "to_entries[] | \"\(.key)<<$EOF\n\(.value)\n$EOF\n\""; }
+          echo "$VARS_CONTEXT" | to_envs >> $GITHUB_ENV
           echo "$SECRETS_CONTEXT" | to_envs >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v4
