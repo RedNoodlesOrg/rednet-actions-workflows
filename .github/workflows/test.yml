@@ -6,4 +6,4 @@ jobs:
   test:
     uses: RedNoodlesOrg/rednet-actions-workflows/.github/workflows/docker-compose-deploy.yml@main
     secrets:
-      SECRETS: ${{ secrets }} 
+        SECRETS_JSON: ${{ toJson(secrets) }} 
