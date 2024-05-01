@@ -26,6 +26,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: SSH Setup Action
-        uses: RedNoodlesOrg/rednet-actions-cloudflared-ssh@main
+        uses: RedNoodlesOrg/rednet-actions-cloudflared-ssh@v1
       - name: Docker
         run: docker compose up -d
