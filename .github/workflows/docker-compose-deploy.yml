@@ -17,18 +17,16 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Expose github environment as shell variables
+        env:
+          SECRETS_CONTEXT: ${{ secrets.SECRETS_JSON }}
+        run: |
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          to_envs() { jq -r "to_entries[] | \"\(.key)<<$EOF\n\(.value)\n$EOF\n\""; }
+          echo "$SECRETS_CONTEXT" | to_envs >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v4
       - name: SSH Setup Action
         uses: RedNoodlesOrg/rednet-actions-cloudflared-ssh@main
-      - name: Expose github environment as shell variables
-        env:
-          SECRETS_CONTEXT: ${{ secrets.SECRETS_JSON }}
-          VARS_CONTEXT: ${{ toJson(vars) }}
-        run: |
-          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
-          to_envs() { jq -r "to_entries[] | \"\(.key)<<$EOF\n\(.value)\n$EOF\n\""; }
-          echo "$VARS_CONTEXT" | to_envs >> $GITHUB_ENV
-          echo "$SECRETS_CONTEXT" | to_envs >> $GITHUB_ENV
       - name: Docker
         run: docker compose up -d
