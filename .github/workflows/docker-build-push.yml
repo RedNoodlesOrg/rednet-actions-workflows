@@ -1,8 +1,7 @@
 name: Docker Image CI
 
 on:
-  release:
-    types: published
+  workflow_call:
 
 env:
   DOCKER_TAG: ${{ vars.DOCKER_HUB_USER }}/${{ vars.DOCKER_IMAGE_NAME }}:${{ github.event.release.tag_name }}
