@@ -1,0 +1,36 @@
+name: Docker Image CI
+
+on:
+  release:
+    types: published
+
+env:
+  DOCKER_TAG: ${{ vars.DOCKER_HUB_USER }}/${{ vars.DOCKER_IMAGE_NAME }}:${{ github.event.release.tag_name }}
+  DOCKER_LATEST: ${{ vars.DOCKER_HUB_USER }}/${{ vars.DOCKER_IMAGE_NAME }}
+
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repo
+      uses: actions/checkout@v4
+    
+    - name: Login to Docker Hub
+      run: |
+        docker login \
+          -u ${{ vars.DOCKER_HUB_USER }} \
+          -p ${{ secrets.DOCKER_HUB_TOKEN }}
+
+    - name: Build the Docker image
+      run: |
+        docker build . --file Dockerfile --tag $DOCKER_TAG
+        docker build . --file Dockerfile --tag $DOCKER_LATEST
+
+    - name: Push the Docker image
+      run: |
+        docker push $DOCKER_TAG
+        docker push $DOCKER_LATEST
