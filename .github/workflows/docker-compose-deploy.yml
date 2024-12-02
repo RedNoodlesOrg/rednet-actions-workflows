@@ -28,4 +28,6 @@ jobs:
       - name: SSH Setup Action
         uses: RedNoodlesOrg/rednet-actions-cloudflared-ssh@v1
       - name: Docker
-        run: docker compose up -d
+        run: |
+        docker compose pull
+        docker compose up -d
